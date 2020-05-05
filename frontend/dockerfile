@@ -1,0 +1,15 @@
+FROM node:buster-slim AS vue-cli
+
+# create workdir
+WORKDIR /code
+
+# install vie-cli
+RUN npm install -g @vue/cli
+
+COPY code/package*.json ./
+
+# open port
+EXPOSE 8000
+
+# run vue cli after start docker container
+ENTRYPOINT vue ui -H 0.0.0.0

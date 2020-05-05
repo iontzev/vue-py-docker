@@ -1,0 +1,50 @@
+version: '3'
+
+volumes:
+    db:
+    node_modules:
+    prod_code:
+  
+services:
+    vue-cli:
+        build: frontend/. 
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./frontend/code:/code
+            - prod_code:/code/prod
+            - node_modules:/code/node_modules
+
+    backend:
+        build: backend/.
+        volumes:
+            - ./backend/code:/code
+
+    redis:
+        image: "redis:alpine"
+
+    nginx:
+        image: "nginx"
+        ports:
+            - "5000:5000"
+        volumes:
+            - ./nginx.dev.conf:/etc/nginx/conf.d/nginx.dev.conf
+            - prod_code:/html
+                 
+    mongo:
+        image: "mongo"
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=dbadmin
+            - MONGO_INITDB_ROOT_PASSWORD=somepassword
+        volumes:
+            - db:/data/db
+
+    mongo-express:
+        image: "mongo-express"
+        environment:
+            - ME_CONFIG_MONGODB_SERVER=mongo
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=dbadmin
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=somepassword
+            - ME_CONFIG_SITE_BASEURL=/db/
+    
+    
