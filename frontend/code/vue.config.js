@@ -1,3 +1,4 @@
 module.exports = {
-  outputDir: 'prod/dist'
+  outputDir: 'prod/dist',
+  runtimeCompiler: true
 }
