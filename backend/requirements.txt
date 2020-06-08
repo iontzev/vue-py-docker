@@ -1,2 +1,4 @@
 aiohttp
 aioreloader
+aioredis
+motor

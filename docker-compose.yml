@@ -19,7 +19,12 @@ services:
         build: backend/.
         volumes:
             - ./backend/code:/code
-
+        environment:
+            - MONGO_USERNAME=devbase
+            - MONGO_PASSWORD=devbase
+            - MONGO_DATABASE=devbase
+            - MONGO_HOSTNAME=mongo
+    
     redis:
         image: "redis:alpine"
 
@@ -32,10 +37,11 @@ services:
             - prod_code:/html
                  
     mongo:
-        image: "mongo"
+        build: db/.
         environment:
             - MONGO_INITDB_ROOT_USERNAME=dbadmin
             - MONGO_INITDB_ROOT_PASSWORD=somepassword
+            - MONGO_INITDB_DATABASE=devbase
         volumes:
             - db:/data/db
 
@@ -45,6 +51,14 @@ services:
             - ME_CONFIG_MONGODB_SERVER=mongo
             - ME_CONFIG_MONGODB_ADMINUSERNAME=dbadmin
             - ME_CONFIG_MONGODB_ADMINPASSWORD=somepassword
+            - ME_CONFIG_MONGODB_AUTH_DATABASE=devbase
             - ME_CONFIG_SITE_BASEURL=/db/
-    
+
+    redis-commander:
+        image: rediscommander/redis-commander:latest
+        environment:
+        - REDIS_HOSTS=local:redis:6379
+        ports:
+        - "8081:8081"
+            
     
